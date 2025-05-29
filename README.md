@@ -4,7 +4,7 @@ This project scrapes legislative bills from the Idaho Legislature and uses the O
 
 ---
 
-## 🔧 Setup
+## Setup
 
 1. **Install Python 3.13+** and create a virtual environment (optional but recommended).
 2. **Install dependencies**:
@@ -15,7 +15,7 @@ This project scrapes legislative bills from the Idaho Legislature and uses the O
 
 ---
 
-## 📥 Step 1: Scrape Legislative Data
+## Step 1: Scrape Legislative Data
 
 Run the scraper:
 
@@ -33,11 +33,11 @@ export DATARUN=04_30_2025
 
 ---
 
-## 📄 Step 2: Convert PDFs to HTML
+## Step 2: Convert PDFs to HTML
 
 This step converts the downloaded PDF files into HTML while preserving formatting like strikethroughs and underlines, which are essential for interpreting legislative changes.
 
-### 🔑 Prerequisites
+### Prerequisites
 
 1. Make sure the `DATARUN` environment variable is set:
 
@@ -52,7 +52,7 @@ This step converts the downloaded PDF files into HTML while preserving formattin
    export PDF_SERVICES_CLIENT_SECRET="your_client_secret_here"
    ```
 
-### ▶️ Run the Conversion
+### Run the Conversion
 
 Start the conversion process:
 
@@ -60,15 +60,15 @@ Start the conversion process:
 python pdf_to_html.py
 ```
 
-> ⚠️ **Note:** This process may take several hours. It is intentionally throttled to avoid overloading external services.
+> **Note:** This process may take several hours. It is intentionally throttled to avoid overloading external services.
 
 ---
 
-## 🧠 Step 3: Machine Learning Analysis
+## Step 3: Machine Learning Analysis
 
 After converting PDFs, run the ML analysis to detect constitutional conflicts using OpenAI.
 
-### 🔑 Prerequisites
+### Prerequisites
 
 1. Ensure `DATARUN` is set:
 
@@ -81,7 +81,7 @@ After converting PDFs, run the ML analysis to detect constitutional conflicts us
    export OPENAI_API_KEY="sk-***********************"
    ```
 
-### ▶️ Run the Analysis
+### Run the Analysis
 
 ```bash
 python ml_analysis.py
@@ -89,7 +89,7 @@ python ml_analysis.py
 
 ---
 
-## 🚀 Step 4: Launch Interactive Dashboard
+## Step 4: Launch Interactive Dashboard
 
 Finally, start the Streamlit app for visual exploration:
 
@@ -97,7 +97,7 @@ Finally, start the Streamlit app for visual exploration:
 streamlit run bill_data_explorer.py
 ```
 
-### 🔗 See it Live
+### See it Live
 
 You can explore the interactive dashboard online here:
 
@@ -105,13 +105,13 @@ You can explore the interactive dashboard online here:
 
 ---
 
-## 📁 Output
+## Output
 
 All processed data is stored in a subdirectory named after the `DATARUN` value (e.g., `04_30_2025`). This enables archival and comparison of different scrape sessions over time.
 
 ---
 
-## 🧠 Future Goals
+## Future Goals
 
 * Fine-tune an OpenAI or Mistral model on historical Idaho legislation
 * Automatically identify constitutional conflicts in proposed bills
@@ -119,12 +119,12 @@ All processed data is stored in a subdirectory named after the `DATARUN` value (
 
 ---
 
-## 📝 License
+## License
 
 This project is open-source. See `LICENSE` for more information.
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please open an issue or pull request with ideas or improvements.
