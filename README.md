@@ -147,6 +147,24 @@ checked in order:
 
 ---
 
+## Running Tests
+
+```bash
+uv run pytest -v
+```
+
+The test suite verifies that:
+
+- All project dependencies install and import correctly (uv setup smoke test)
+- The scraper correctly parses bill index and detail pages
+- PDF downloads work as expected
+- The full scrape pipeline produces the expected CSV and datarun file
+- `config.py` DATARUN resolution logic works (env var → file → auto-detect)
+
+Tests use mocked HTTP responses so no network access is required.
+
+---
+
 ## Troubleshooting
 
 | Problem | Solution |
