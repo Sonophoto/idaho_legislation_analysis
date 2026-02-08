@@ -22,4 +22,10 @@ dependencies = [
 dev = [
     "black",
     "ipython",
+    "pytest>=9.0.2",
+    "responses>=0.25.8",
 ]
+
+[tool.pytest.ini_options]
+testpaths = ["."]
+pythonpath = ["."]
