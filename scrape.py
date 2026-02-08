@@ -22,7 +22,7 @@ from ratelimit import limits, sleep_and_retry
 from tenacity import (
     retry,
     stop_after_attempt,
-    wait_fixed,
+    wait_exponential,
     retry_if_exception_type,
 )
 
@@ -39,8 +39,8 @@ def write_soup_to_file(soup, filename):
 
 
 @retry(
-    stop=stop_after_attempt(3),
-    wait=wait_fixed(1),
+    stop=stop_after_attempt(5),
+    wait=wait_exponential(multiplier=1, min=4, max=30),
     retry=retry_if_exception_type(requests.exceptions.RequestException),
 )
 @sleep_and_retry
@@ -49,7 +49,7 @@ def parse_detail_page(session, detail_url):
     """Fetch a bill's detail page and return the sponsor name."""
     full_url = BASE_URL + detail_url
 
-    resp = session.get(full_url, timeout=(3, 5))
+    resp = session.get(full_url, timeout=(5, 10))
     resp.raise_for_status()
     soup = BeautifulSoup(resp.text, "html.parser")
     bill_table = soup.find("table", class_="bill-table")
@@ -64,13 +64,13 @@ def parse_detail_page(session, detail_url):
 @sleep_and_retry
 @limits(calls=10, period=1)
 @retry(
-    stop=stop_after_attempt(3),
-    wait=wait_fixed(1),
+    stop=stop_after_attempt(5),
+    wait=wait_exponential(multiplier=1, min=4, max=30),
     retry=retry_if_exception_type(requests.exceptions.RequestException),
 )
 def download_pdf(session, url, dir_path):
     """Download a PDF from *url* into *dir_path* and return the local path."""
-    response = session.get(url, stream=True, timeout=(3, 5))
+    response = session.get(url, stream=True, timeout=(5, 10))
     response.raise_for_status()
 
     pdf_local_path = os.path.join(dir_path, url.split("/")[-1])
@@ -83,11 +83,16 @@ def download_pdf(session, url, dir_path):
     return pdf_local_path
 
 
+@retry(
+    stop=stop_after_attempt(5),
+    wait=wait_exponential(multiplier=1, min=4, max=30),
+    retry=retry_if_exception_type(requests.exceptions.RequestException),
+)
 @sleep_and_retry
 @limits(calls=10, period=1)
 def scrape_idaho_legislation(session, url):
     """Scrape the Idaho legislation index page and return a list of bill records."""
-    response = session.get(url)
+    response = session.get(url, timeout=(5, 10))
     response.raise_for_status()
     soup = BeautifulSoup(response.text, "html.parser")
 

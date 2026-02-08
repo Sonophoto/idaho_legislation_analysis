@@ -254,6 +254,15 @@ With `__main__` guards in place the three pipeline scripts (`scrape.py`,
 management commands without modification.  The shared `config.py` and
 `utils.py` modules are also import-safe.
 
+### Scraper robustness (2026-02-08)
+
+All three functions in `scrape.py` that hit the Idaho Legislature site now use
+exponential backoff retries (5 attempts, waits of ~4s → 8s → 16s → 30s,
+totalling ~60 seconds) instead of the previous 3 attempts with a fixed
+1-second wait.  Connection/read timeouts increased from (3, 5) to (5, 10)
+seconds.  The `ratelimit` decorators (`@sleep_and_retry` + `@limits`) are
+preserved on all three functions to avoid hammering the site.
+
 ### Items intentionally left unchanged
 
 - No test infrastructure exists; adding it is deferred to the Django
