@@ -14,6 +14,7 @@ from tenacity import (
 )
 from datetime import datetime
 from ratelimit import limits, sleep_and_retry
+from config import save_datarun
 
 current_date = datetime.now().strftime("%m_%d_%Y")
 
@@ -140,6 +141,7 @@ try:
         index=False,
     )
 
-    print(f"""Scrape Successful.  Please, 'export DATARUN={current_date}'""")
+    print(f"""Scrape Successful.  Data directory: Data/{current_date}""")
+    save_datarun(current_date)
 finally:
     session.close()

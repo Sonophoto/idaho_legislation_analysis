@@ -1,5 +1,4 @@
 import os
-import sys
 import json
 import openai
 import pandas as pd
@@ -20,6 +19,8 @@ from tenacity import (
 )
 
 from ratelimit import limits, sleep_and_retry
+
+from config import get_datarun
 
 
 def find_null_json_files(directory):
@@ -131,11 +132,7 @@ If there are no issues, return an empty array: []
         return None
 
 
-datarun = os.getenv("DATARUN")
-
-if datarun is None:
-    print("You need to set the DATARUN environment variable")
-    sys.exit(1)
+datarun = get_datarun()
 
 df = pd.read_csv("Data/{datarun}/idaho_bills_{datarun}.csv".format(datarun=datarun))
 

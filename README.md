@@ -23,7 +23,7 @@ Run the scraper:
 uv run python scrape.py
 ```
 
-Upon completion, the script will output a string representing the date of the scrape and the directory where the data is stored. This value is referred to as the **`DATARUN`**, and should be exported as an environment variable for use in subsequent steps. For example:
+Upon completion, the script will output the date of the scrape and automatically save it to `Data/.datarun`. Subsequent steps read this file to locate the data. You can override it at any time by setting the `DATARUN` environment variable:
 
 ```bash
 export DATARUN=04_30_2025
@@ -36,14 +36,6 @@ export DATARUN=04_30_2025
 ## Step 2: Convert PDFs to HTML
 
 This step converts the downloaded PDF files into HTML while preserving formatting like strikethroughs and underlines, which are essential for interpreting legislative changes. It uses `pdf2docx` for PDF→DOCX conversion and `mammoth` for DOCX→HTML conversion — no external API credentials required.
-
-### Prerequisites
-
-1. Make sure the `DATARUN` environment variable is set:
-
-   ```bash
-   export DATARUN=04_30_2025
-   ```
 
 ### Run the Conversion
 
@@ -61,12 +53,7 @@ After converting PDFs, run the ML analysis to detect constitutional conflicts us
 
 ### Prerequisites
 
-1. Ensure `DATARUN` is set:
-
-   ```bash
-   export DATARUN=04_30_2025
-   ```
-2. Set your OpenAI API key (obfuscated):
+1. Set your OpenAI API key (obfuscated):
 
    ```bash
    export OPENAI_API_KEY="sk-***********************"
@@ -98,7 +85,7 @@ You can explore the interactive dashboard online here:
 
 ## Output
 
-All processed data is stored in a subdirectory named after the `DATARUN` value (e.g., `04_30_2025`). This enables archival and comparison of different scrape sessions over time.
+All processed data is stored in a subdirectory named after the datarun value (e.g., `04_30_2025`). The datarun is saved to `Data/.datarun` automatically by `scrape.py` so that subsequent pipeline steps can find it without manual environment variable exports. You can override it at any time by setting the `DATARUN` environment variable. This enables archival and comparison of different scrape sessions over time.
 
 ---
 

@@ -1,16 +1,14 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import os
 from pathlib import Path
+
+from config import get_datarun
 
 
 @st.cache_data
 def load_data():
-    run = os.getenv("DATARUN")
-    if not run:
-        st.error("Please set DATARUN in your environment.")
-        st.stop()
+    run = get_datarun()
     path = Path("Data") / f"idaho_bills_enriched_{run}.jsonl"
     df = pd.read_json(path, orient="records", lines=True)
     return df
