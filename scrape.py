@@ -95,7 +95,7 @@ def scrape_idaho_legislation(url):
         detail_link = link_tag["href"]
         bill_number = detail_link.split("/")[-1]
         bill_title = cells[1].get_text(strip=True) if len(cells) > 1 else ""
-        pdf_url = f"https://legislature.idaho.gov/wp-content/uploads/sessioninfo/2025/legislation/{bill_number}.pdf"
+        pdf_url = f"https://legislature.idaho.gov/wp-content/uploads/sessioninfo/2026/legislation/{bill_number}.pdf"
         status = cells[3].get_text(strip=True)
 
         results.append([bill_number, bill_title, status, detail_link, pdf_url])
@@ -103,7 +103,7 @@ def scrape_idaho_legislation(url):
     return results
 
 
-url = "https://legislature.idaho.gov/sessioninfo/2025/legislation/"
+url = "https://legislature.idaho.gov/sessioninfo/2026/legislation/"
 bill_data = scrape_idaho_legislation(url)
 
 bill_df = pd.DataFrame(
