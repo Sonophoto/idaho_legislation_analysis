@@ -12,6 +12,7 @@ additions (underline) and deletions (strikethrough) in bills.  HTML
 entities (&amp; &lt; &gt; &quot;) are properly escaped by Mammoth.
 
 Usage:
+    uv run python scrape.py      # writes Data/.datarun automatically
     uv run python pdf_to_html.py
 """
 
