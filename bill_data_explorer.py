@@ -1,11 +1,11 @@
 import streamlit as st
 import pandas as pd
-import os
 from pathlib import Path
 from utils import load_data
+from config import get_datarun
 
 
-datarun = os.getenv("DATARUN")
+datarun = get_datarun()
 
 df = load_data()
 

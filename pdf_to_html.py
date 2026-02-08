@@ -12,16 +12,17 @@ additions (underline) and deletions (strikethrough) in bills.  HTML
 entities (&amp; &lt; &gt; &quot;) are properly escaped by Mammoth.
 
 Usage:
-    export DATARUN=04_30_2025
+    uv run python scrape.py      # writes Data/.datarun automatically
     uv run python pdf_to_html.py
 """
 
 import os
-import sys
 
 import mammoth
 import pandas as pd
 from pdf2docx import Converter
+
+from config import get_datarun
 
 
 def pdf_to_docx(pdf_path, docx_path):
@@ -57,11 +58,7 @@ strike => s
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    datarun = os.getenv("DATARUN")
-
-    if datarun is None:
-        print("You need to set the DATARUN environment variable")
-        sys.exit(1)
+    datarun = get_datarun()
 
     df = pd.read_csv(
         "Data/{datarun}/idaho_bills_{datarun}.csv".format(datarun=datarun)

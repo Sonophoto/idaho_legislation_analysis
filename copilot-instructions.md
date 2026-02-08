@@ -29,7 +29,7 @@ uv run streamlit run bill_data_explorer.py       # step 4: launch dashboard (cur
 
 | Variable | Purpose |
 |----------|---------|
-| `DATARUN` | Date string like `04_30_2025`, names the data subdirectory |
+| `DATARUN` | Optional override – date string like `04_30_2025`. When not set, the value is read from `Data/.datarun` (written automatically by `scrape.py`). |
 | `OPENAI_API_KEY` | OpenAI API key for GPT-4o analysis |
 
 ## Data Pipeline
