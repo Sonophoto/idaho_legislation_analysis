@@ -11,7 +11,8 @@ This project scrapes legislative bills from the Idaho Legislature, converts PDFs
 - **Current Frontend**: Streamlit (being migrated to Django + Bootstrap)
 - **Visualization**: Plotly Express
 - **Data Format**: JSONL files read into Pandas DataFrames
-- **APIs**: OpenAI (GPT-4o), Adobe PDF Services
+- **APIs**: OpenAI (GPT-4o)
+- **PDF Conversion**: pdf2docx (PDF→DOCX) + mammoth (DOCX→HTML) — fully local, no external API
 - **Dev Tools**: black (formatter), ipython (REPL) — listed under `[dependency-groups] dev`
 
 ### Key Commands
@@ -29,8 +30,6 @@ uv run streamlit run bill_data_explorer.py       # step 4: launch dashboard (cur
 | Variable | Purpose |
 |----------|---------|
 | `DATARUN` | Date string like `04_30_2025`, names the data subdirectory |
-| `PDF_SERVICES_CLIENT_ID` | Adobe PDF Services credential |
-| `PDF_SERVICES_CLIENT_SECRET` | Adobe PDF Services credential |
 | `OPENAI_API_KEY` | OpenAI API key for GPT-4o analysis |
 
 ## Data Pipeline

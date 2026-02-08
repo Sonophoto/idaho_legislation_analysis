@@ -35,7 +35,7 @@ export DATARUN=04_30_2025
 
 ## Step 2: Convert PDFs to HTML
 
-This step converts the downloaded PDF files into HTML while preserving formatting like strikethroughs and underlines, which are essential for interpreting legislative changes.
+This step converts the downloaded PDF files into HTML while preserving formatting like strikethroughs and underlines, which are essential for interpreting legislative changes. It uses `pdf2docx` for PDF→DOCX conversion and `mammoth` for DOCX→HTML conversion — no external API credentials required.
 
 ### Prerequisites
 
@@ -45,13 +45,6 @@ This step converts the downloaded PDF files into HTML while preserving formattin
    export DATARUN=04_30_2025
    ```
 
-2. Set your Adobe PDF Services credentials:
-
-   ```bash
-   export PDF_SERVICES_CLIENT_ID="your_client_id_here"
-   export PDF_SERVICES_CLIENT_SECRET="your_client_secret_here"
-   ```
-
 ### Run the Conversion
 
 Start the conversion process:
@@ -59,8 +52,6 @@ Start the conversion process:
 ```bash
 uv run python pdf_to_html.py
 ```
-
-> **Note:** This process may take several hours. It is intentionally throttled to avoid overloading external services.
 
 ---
 

@@ -9,7 +9,7 @@ dependencies = [
     "numpy",
     "openai",
     "pandas",
-    "pdfservices-sdk",
+    "pdf2docx>=0.5.8",
     "plotly",
     "python-docx",
     "ratelimit",
