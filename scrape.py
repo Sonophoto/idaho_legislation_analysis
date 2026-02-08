@@ -125,8 +125,12 @@ def scrape_idaho_legislation(session, url):
 
 def main():
     """Run the full scrape pipeline: index → sponsors → PDFs → CSV."""
-    current_date = datetime.now().strftime("%m_%d_%Y")
-    dir_path = os.path.join("Data", current_date)
+    datarun = os.getenv("DATARUN", "").strip()
+    if not datarun:
+        datarun = datetime.now().strftime("%m_%d_%Y")
+    save_datarun(datarun)
+
+    dir_path = os.path.join("Data", datarun)
     os.makedirs(dir_path, exist_ok=True)
 
     session = requests.Session()
@@ -160,12 +164,11 @@ def main():
         bill_df["local_pdf_path"] = local_pdf_paths
 
         bill_df.to_csv(
-            os.path.join(dir_path, f"idaho_bills_{current_date}.csv"),
+            os.path.join(dir_path, f"idaho_bills_{datarun}.csv"),
             index=False,
         )
 
-        print(f"Scrape Successful.  Data directory: Data/{current_date}")
-        save_datarun(current_date)
+        print(f"Scrape Successful.  Data directory: Data/{datarun}")
     finally:
         session.close()
 
