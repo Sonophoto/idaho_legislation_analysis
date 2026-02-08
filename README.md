@@ -6,11 +6,11 @@ This project scrapes legislative bills from the Idaho Legislature and uses the O
 
 ## Setup
 
-1. **Install Python 3.13+** and create a virtual environment (optional but recommended).
-2. **Install dependencies**:
+1. **Install [uv](https://docs.astral.sh/uv/getting-started/installation/)** (Python package and project manager).
+2. **Sync dependencies** (this also installs the correct Python version automatically):
 
    ```bash
-   pip install -r requirements.txt
+   uv sync
    ```
 
 ---
@@ -20,7 +20,7 @@ This project scrapes legislative bills from the Idaho Legislature and uses the O
 Run the scraper:
 
 ```bash
-python scrape.py
+uv run python scrape.py
 ```
 
 Upon completion, the script will output a string representing the date of the scrape and the directory where the data is stored. This value is referred to as the **`DATARUN`**, and should be exported as an environment variable for use in subsequent steps. For example:
@@ -57,7 +57,7 @@ This step converts the downloaded PDF files into HTML while preserving formattin
 Start the conversion process:
 
 ```bash
-python pdf_to_html.py
+uv run python pdf_to_html.py
 ```
 
 > **Note:** This process may take several hours. It is intentionally throttled to avoid overloading external services.
@@ -84,7 +84,7 @@ After converting PDFs, run the ML analysis to detect constitutional conflicts us
 ### Run the Analysis
 
 ```bash
-python ml_analysis.py
+uv run python ml_analysis.py
 ```
 
 ---
@@ -94,7 +94,7 @@ python ml_analysis.py
 Finally, start the Streamlit app for visual exploration:
 
 ```bash
-streamlit run bill_data_explorer.py
+uv run streamlit run bill_data_explorer.py
 ```
 
 ### See it Live
