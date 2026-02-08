@@ -80,7 +80,7 @@ Dashboard (bill_data_explorer.py + pages/) → reads enriched JSONL
 │   └── status_codes.py               # Static reference table of status codes
 ├── utils.py                 # Shared helper: loads enriched JSONL with @st.cache_data
 ├── scrape.py                # Web scraper (requests + BeautifulSoup)
-├── pdf_to_html.py           # PDF→DOCX (Adobe API) → HTML (mammoth)
+├── pdf_to_html.py           # PDF→DOCX (pdf2docx) → HTML (mammoth)
 ├── ml_analysis.py           # OpenAI GPT-4o constitutional analysis
 ├── Data/
 │   ├── idaho_bills_enriched_04_30_2025.jsonl
@@ -205,3 +205,61 @@ class ConstitutionalIssue(models.Model):
 - The project is **stateless** by design — each pipeline step reads/writes files. Django adds database persistence.
 - **No existing test infrastructure** — consider adding tests during the migration.
 - **Dev container** (`.devcontainer/devcontainer.json`) will need updating: change the `postAttachCommand` from `uv run streamlit run ...` to `uv run python manage.py runserver`.
+
+## Code Review Findings (2026-02-08)
+
+Summary of the full repo review performed before the Django + Bootstrap migration.
+
+### Structural improvements applied
+
+- **`scrape.py`** and **`ml_analysis.py`** — all top-level script logic is now
+  wrapped in `main()` with an `if __name__ == "__main__":` guard.  This makes
+  the modules safely importable (e.g. for Django management commands or tests)
+  without triggering side-effects on import.
+- **`scrape.py`** — functions that formerly relied on module-level globals
+  (`session`, `dir_path`) now receive them as explicit parameters.
+  `BASE_URL` and `LEGISLATION_URL` are module-level constants.
+- **`ml_analysis.py`** — duplicate `tenacity` import block removed; shared
+  analysis loop extracted into `_analyse_bills()` helper to eliminate
+  copy-paste between pass-1 (gpt-4o) and pass-2 (gpt-4o-mini).
+  `load_json_data()` moved above `main()` so it can be imported separately.
+
+### Bugs fixed
+
+- **`ml_analysis.py`** line 203 (old) wrote the failed-bills JSONL to
+  `"data/..."` (lowercase) instead of `"Data/..."`.  Fixed to `"Data"`.
+
+### Pythonic style improvements
+
+- All `.format()` string interpolation replaced with f-strings.
+- Unused imports removed (`os` in `issue_type_histogram.py`, `RetryError` in
+  `scrape.py`, `plotly.express` in `utils.py`).
+- Stale filename comment in `issues_by_sponsor_histogram.py` corrected.
+- Module-level docstrings added to every Python file.
+- Function docstrings added where they aid understanding (helpers, public
+  API); not added where the code is self-explanatory.
+- Import order follows stdlib → third-party → local convention.
+
+### Documentation improvements
+
+- **`README.md`** rewritten with: prerequisites, quick-start block, detailed
+  per-step instructions, project structure tree, environment-variable table,
+  troubleshooting table, and future goals mentioning Django migration.
+- **`copilot-instructions.md`** updated with this findings section.
+
+### Django migration readiness
+
+With `__main__` guards in place the three pipeline scripts (`scrape.py`,
+`pdf_to_html.py`, `ml_analysis.py`) can be directly imported by Django
+management commands without modification.  The shared `config.py` and
+`utils.py` modules are also import-safe.
+
+### Items intentionally left unchanged
+
+- No test infrastructure exists; adding it is deferred to the Django
+  migration since the test framework and runner will change.
+- Streamlit page files in `pages/` keep their top-level `df = load_data()`
+  pattern — this is idiomatic Streamlit and will be replaced during
+  migration.
+- `pdf_to_html.py` already had a `__main__` guard and docstrings; no
+  changes needed.
